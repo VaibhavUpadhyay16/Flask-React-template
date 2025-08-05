@@ -1,3 +1,5 @@
+import os
+
 from dotenv import load_dotenv
 from flask import Flask, jsonify
 from flask.typing import ResponseReturnValue
@@ -6,7 +8,7 @@ from werkzeug.middleware.proxy_fix import ProxyFix
 
 from bin.blueprints import api_blueprint, img_assets_blueprint, react_blueprint
 from modules.account.rest_api.account_rest_api_server import AccountRestApiServer
-from modules.application.application_service import ApplicationService
+from modules.application.application_service import ApplicationServiceclear
 from modules.application.errors import AppError, WorkerClientConnectionError
 from modules.application.workers.health_check_worker import HealthCheckWorker
 from modules.authentication.rest_api.authentication_rest_api_server import AuthenticationRestApiServer
@@ -16,11 +18,20 @@ from modules.logger.logger_manager import LoggerManager
 from modules.task.rest_api.task_rest_api_server import TaskRestApiServer
 from scripts.bootstrap_app import BootstrapApp
 
+from modules.comment.routes import comment_bp
+
+from modules.extensions import db, ma
+
 load_dotenv()
 
 app = Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 cors = CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}})
 
+db.init_app(app)
+ma.init_app(app)
+app.register_blueprint(comment_bp)
 # Mount deps
 LoggerManager.mount_logger()
 
@@ -37,6 +48,18 @@ try:
 
 except WorkerClientConnectionError as e:
     Logger.critical(message=e.message)
+
+if os.getenv("SKIP_TEMPORAL", "false").lower() == "true":
+    Logger.info(message="Skipping Temporal connection in development mode.")
+else:
+    try:
+        ApplicationService.connect_temporal_server()
+
+        # Start the health check worker
+        ApplicationService.schedule_worker_as_cron(cls=HealthCheckWorker, cron_schedule="*/10 * * * *")
+
+    except WorkerClientConnectionError as e:
+        Logger.critical(message=e.message)
 
 
 # Apply ProxyFix to interpret `X-Forwarded` headers if enabled in configuration
@@ -68,3 +91,7 @@ app.register_blueprint(react_blueprint)
 @app.errorhandler(AppError)
 def handle_error(exc: AppError) -> ResponseReturnValue:
     return jsonify({"message": exc.message, "code": exc.code}), exc.http_code or 500
+
+
+if __name__ == "__main__":
+    app.run(debug=True, port=5000)

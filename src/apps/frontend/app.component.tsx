@@ -4,12 +4,12 @@ import { Toaster } from 'react-hot-toast';
 
 import { ErrorFallback } from './pages/error';
 import { Logger } from './utils/logger';
-
 import { AccountProvider } from 'frontend/contexts';
 import { AuthProvider } from 'frontend/contexts/auth.provider';
 import { Config } from 'frontend/helpers';
 import { AppRoutes } from 'frontend/routes';
 import InspectLet from 'frontend/vendor/inspectlet';
+import CommentManager from './components/CommentManager';
 
 Logger.init();
 
@@ -30,6 +30,8 @@ export default function App(): React.ReactElement {
           <AppRoutes />
         </AccountProvider>
       </AuthProvider>
+      <CommentManager />;
     </ErrorBoundary>
+    
   );
 }
