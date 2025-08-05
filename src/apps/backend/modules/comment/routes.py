@@ -8,6 +8,9 @@ from modules.comment.schemas import comment_schema, comments_schema
 
 
 
+
+
+
 comment_bp = Blueprint('comments', __name__, url_prefix='/api/comments')
 
 @comment_bp.route('/', methods=['POST'])
