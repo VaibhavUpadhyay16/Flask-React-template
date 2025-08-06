@@ -24,3 +24,118 @@ Boilerplate project for Flask, React & MongoDB based projects. This README docum
 Once you have familiarized yourself with the documentation, head over to the [Engineering Handbook](https://github.com/jalantechnologies/handbook/blob/main/engineering/index.md) to learn about the best practices we follow at Better Software.
 
 PS: Before you start working on the application, these [three git settings](https://spin.atomicobject.com/git-configurations-default/) are a must-have!
+
+
+
+# Full Stack Comment Manager – Internship Task
+
+A complete full-stack implementation of a **Comment Management** system using Flask (Backend) and React (Frontend) as part of the internship assignment.
+
+---
+
+##  Features
+
+### 🔧 Backend (Flask + SQLAlchemy)
+- RESTful CRUD APIs for managing comments
+- Comments are linked to tasks via `task_id`
+- Input validations and error handling
+- Tested using **Postman**
+
+📁 Code Directory:
+src/apps/backend/modules/comment/
+ Download all the dependences for a smooth working 
+yaml
+Copy
+Edit
+
+---
+
+### Frontend (React + TypeScript + TailwindCSS)
+- Simple UI for:
+  - Adding new comments
+  - Editing existing comments
+  - Deleting comments
+  - Listing all comments for a specific task
+- Uses `Axios` for API calls
+- Clean responsive design
+
+Component File:
+src/apps/frontend/components/CommentManager.tsx
+
+yaml
+Copy
+Edit
+
+---
+
+## 💻 Local Setup Instructions
+
+### Backend Setup
+
+1. Open terminal and activate the virtual environment from root:
+   ```bash
+   .\venv\Scripts\activate
+Navigate to backend directory:
+
+bash
+Copy
+Edit
+cd src\apps\backend
+Run the Flask server:
+
+bash
+Copy
+Edit
+python server.p
+Flask backend runs on: http://localhost:5000
+
+Frontend Setup
+Navigate to frontend directory:
+
+bash
+Copy
+Edit
+cd src\apps\frontend
+Start the frontend dev server:
+
+bash
+Copy
+Edit
+npm run serve:frontend
+React app runs on: http://localhost:3000
+
+ Testing
+Backend tested using Postman (Create, Get, Update, Delete APIs)
+
+Frontend tested in browser (Live React integration)
+
+Comments update live on action without refresh
+
+UI Preview
+Screenshots of the working frontend UI have been uploaded in the repository under /screenshots/ or /assets/ folder.
+
+ Notes
+The project uses a SQLite database: app.db
+
+Ensure table migrations are applied if starting fresh
+
+Designed with reusability and modularity in mind
+
+ Acknowledgement
+Submitted as part of the internship evaluation under Jalance Technologies
+Forked from: jalantechnologies/flask-react-template
+
+yaml
+Copy
+Edit
+
+---
+
+###  Next Step:
+
+- Save this file as `README.md` in the root folder.
+- Stage and commit it:
+  ```bash
+  git add README.md
+  git commit -m "Added detailed README for final submission"
+  git push origin main
